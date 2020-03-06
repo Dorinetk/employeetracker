@@ -53,15 +53,14 @@ const init = () => {
             case  "Add an employee":
                 addEmployee();
                 break;
-            // case "Update an employee role":
-            //     updateEmployeeRole();
-            //     break;
-            
-            // case "Add a role":
-            //     addRole();
-            //     break;
+            case "Add a role":
+                addRole();
+                break;
             // case "View a role":
             //     viewRole();
+            //     break;
+            // case "Update an employee role":
+            //     updateEmployeeRole();
             //     break;
             // case "View an employee":
             //     viewEmployee();
@@ -116,7 +115,10 @@ const addDepartment = () => {
 
     });
 }
+
+
 // need to review it
+
 const viewDepartment = () => {
 
 
@@ -138,51 +140,144 @@ const viewDepartment = () => {
     //});
 }
 
-const addEmployee = () => {
-    inquirer.prompt([
-        {
-            type:"input",
-            name:"firstName",
-            message:"Enter the employee's first name: "
-        },
-        {
-            type:"input",
-            name:"lastName",
-            message:"Enter the employee's last name: "
-        },
-        {
-            type:"input",
-            name:"roleId",
-            message:"Enter the employee's role id: "
-        },
-        {
-            type:"input",
-            name:"managerId",
-            message: "Does this employee have a manager? Enter his id"
-            // select the manager id from a list??
-        
-        }]
-   ).then(function(response){
-       console.log("Adding an employee to the database...\n");
-       //update DB
-       const query = connection.query(
-           "INSERT INTO employee SET ?",
+// add roles
+const addRole = () => {
+
+    //user selects the department id in DB
+   
+    connection.query( "SELECT * FROM department", function(err,resultDept) {
+
+        if (err) throw err;
+
+        inquirer.prompt([
             {
-                first_name: response.firstName,
-                last_name: response.lastName,
-                role_id: response.roleId,
-                manager_id: response.managerId || 0
+                 type: "input",
+                 name: "titleEmp",
+                 message: "What is the title?"
             },
-            function(err,res){
-            if(err) throw err;
-            console.log(response.firstName + " was added to the database");
-            console.table(res);
-            init();
-          }
-        );
-    });
+            {
+               type: "input",
+               name: "salaryEmp",
+               message: "What is the salary?"
+           },
+           {
+             name:"choiceDept",
+             type:"rawlist",
+             message: "Select the department ID for this role: ",
+             choices: resultDept.map (department => {
+                return {
+                    value: department.id,
+                    name: department.name
+                }
+              })
+            }
+        ]).then( function(answer){
+             connection.query(
+                 "INSERT INTO role SET ?",
+                 { 
+                     title: answer.titleEmp,
+                     salary: answer.salaryEmp,
+                     department_id: answer.choiceDept
+                 },
+                 function(err,res) {
+                   if (err) throw err;
+                   console.log("A role added to your employee");
+                   init();
+               }
+            );
+        });
+
+
+    })
+   
 }
-//
+
+// add Employee, check role_id in role table and 
+// manager_id is another employee from DB
+const addEmployee = () => {
+    connection.query("SELECT * FROM role", function(err, resultRole) {
+
+        connection.query("SELECT * FROM employee", function(err,resultEmployee) {
+
+            if (err) throw err;
+
+            let managerSelect = resultEmployee.map(employee => {
+                return {
+                   name: `${employee.first_name} ${employee.last_name}`,
+                   value: employee.id
+                }
+              });
+              managerSelect.push({name:"None", value: null})
+
+
+             inquirer.prompt([
+            {
+                type:"input",
+                name:"firstName",
+                message:"Enter the employee's first name: "
+            },
+            {
+                type:"input",
+                name:"lastName",
+                message:"Enter the employee's last name: "
+            },
+            {
+                name:"choiceRole",
+                type:"rawlist",
+                message: "Select the role ID for this employee: ",
+                choices: resultRole.map (role => {
+                   return {
+                       value: role.id,
+                       name: role.title
+                   }
+                 })
+            },
+            {
+                type:"list",
+                name:"managerId",
+                message: "Select this employee's manager id: ",
+                choices: managerSelect
+
+            }]
+
+       ).then(function(response){
+           console.log("Adding an employee to the database...\n");
+           //update DB
+           const query = connection.query(
+               "INSERT INTO employee SET ?",
+                {
+                    first_name: response.firstName,
+                    last_name: response.lastName,
+                    role_id: response.choiceRole,
+                    manager_id: response.managerId || 0
+                },
+                function(err,res){
+                if(err) throw err;
+                console.log(response.firstName + " was added to the database");
+                console.table(res);
+                init();
+              }
+            );
+        });
+
+
+
+
+        })
+
+        
+
+
+    } )
+
+
+    
+}
+
+
+
+
+
 
 
 
