@@ -16,6 +16,10 @@ connection.connect(function (err) {
     console.log("connected with DB")
     init();
 })
+// to add depart, roles and employees first?
+// and then make complex queries
+// invert sequence below in init
+
 
 const init = () => {
     console.log("welcome to his app that will assist you manage your employee's database. \n");
@@ -46,22 +50,23 @@ const init = () => {
             case "View a department":
                 viewDepartment();
                 break;
+            case  "Add an employee":
+                addEmployee();
+                break;
+            // case "Update an employee role":
+            //     updateEmployeeRole();
+            //     break;
+            
             // case "Add a role":
             //     addRole();
             //     break;
             // case "View a role":
             //     viewRole();
             //     break;
-
-            // case  "Add an employee":
-            //     addEmployee();
-            //     break;
             // case "View an employee":
             //     viewEmployee();
             //     break;
-            // case "Update an employee role":
-            //     updateEmployeeRole();
-            //     break;
+            // 
 
             default:
                 quitProgram(); // displays something in console and connection.end
@@ -111,37 +116,73 @@ const addDepartment = () => {
 
     });
 }
-
+// need to review it
 const viewDepartment = () => {
 
-    inquirer.prompt(
-        {
-            type: "input",
-            name: "deptView",
-            message: "Enter the name of the depart. you want to view:",
-        }
 
-    ).then(function (response) {
         console.log("Displaying a department...\n");
-        //view employees in the marketing dept
-        // join query on dept and employee right
+        
         var query = connection.query(
             //"SELECT name, first_name, last_name FROM department LEFT JOIN employee ON department.id = ",
-            "SELECT ? FROM department",
-            {
-                name: response.deptView
-            },
+            "SELECT * FROM department",
+            
             function(err,res){
                 if (err) throw err;
-                console.log(response.deptView + " department displayed");
-                console.log(res);//??
+                console.log(" Viewing all departments");
+                console.table(res);//??
                 init();
             });
             
-        console.log(query.sql);
+        //console.log(query.sql);
 
+    //});
+}
+
+const addEmployee = () => {
+    inquirer.prompt([
+        {
+            type:"input",
+            name:"firstName",
+            message:"Enter the employee's first name: "
+        },
+        {
+            type:"input",
+            name:"lastName",
+            message:"Enter the employee's last name: "
+        },
+        {
+            type:"input",
+            name:"roleId",
+            message:"Enter the employee's role id: "
+        },
+        {
+            type:"input",
+            name:"managerId",
+            message: "Does this employee have a manager? Enter his id"
+            // select the manager id from a list??
+        
+        }]
+   ).then(function(response){
+       console.log("Adding an employee to the database...\n");
+       //update DB
+       const query = connection.query(
+           "INSERT INTO employee SET ?",
+            {
+                first_name: response.firstName,
+                last_name: response.lastName,
+                role_id: response.roleId,
+                manager_id: response.managerId || 0
+            },
+            function(err,res){
+            if(err) throw err;
+            console.log(response.firstName + " was added to the database");
+            console.table(res);
+            init();
+          }
+        );
     });
 }
+//
 
 
 
