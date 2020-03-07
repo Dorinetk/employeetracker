@@ -47,21 +47,22 @@ const init = () => {
             case "Add a department":
                 addDepartment();
                 break;
-            case "View a department":
-                viewDepartment();
+            case "Add a role":
+                addRole();
                 break;
             case  "Add an employee":
                 addEmployee();
                 break;
-            case "Add a role":
-                addRole();
+            case "View a department":
+                viewDepartment();
+                break;
+            case "Update an employee role":
+                updateEmployeeRole();
                 break;
             // case "View a role":
             //     viewRole();
             //     break;
-            // case "Update an employee role":
-            //     updateEmployeeRole();
-            //     break;
+           
             // case "View an employee":
             //     viewEmployee();
             //     break;
@@ -197,6 +198,8 @@ const addRole = () => {
 const addEmployee = () => {
     connection.query("SELECT * FROM role", function(err, resultRole) {
 
+        if (err) throw err;
+
         connection.query("SELECT * FROM employee", function(err,resultEmployee) {
 
             if (err) throw err;
@@ -259,20 +262,74 @@ const addEmployee = () => {
               }
             );
         });
+    })
+
+    })
+}
+// update Employee Role
+
+const updateEmployeeRole = () => {
+
+    connection.query( "SELECT * FROM employee", function(err, employeeUpdate) {
+
+       if (err) throw err;
 
 
+      connection.query ("SELECT * FROM role", function(err, newRole) {
 
+        if (err) throw err;
 
+        inquirer.prompt([
+            {
+                type: "rawlist",
+                name: "updateEmpId",
+                massage: "Select the employee to update:",
+                choices: employeeUpdate.map(employee => {
+                        return {
+                           name: `${employee.first_name} ${employee.last_name}`,
+                           value: employee.id
+                        }
+                      })
+            },
+            {   type: "rawlist",
+                name: "updateRole",
+                massage: "Select the new role: ",
+                choices: newRole.map(role => {
+                    return {
+                       name: role.title,
+                       value: role.id
+                    }
+                  })
+            }
+    
+        ])
+        .then(function(response){
+
+           console.log("Adding an employee to the database...\n");
+           //update DB
+           const query = connection.query(
+               "UPDATE employee SET ? WHERE ?",
+               [{
+                   role_id: response.updateRole
+                },
+               {
+                   id: response.updateEmpId
+               }
+               ],
+                
+                function(err,res){
+                if(err) throw err;
+                console.log(" Employee's role updated");
+                init();
+              }
+            );
+    
         })
 
-        
-
-
-    } )
-
-
-    
+      });
+    });
 }
+
 
 
 
