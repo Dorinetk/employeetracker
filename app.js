@@ -30,12 +30,16 @@ const init = () => {
             message: " Select an option:",
             choices: [
                 "Add a department",
-                "View a department",
                 "Add a role",
-                "View a role",
                 "Add an employee",
-                "View an employee",
+                "View all employees",
+                "View employees by a department",
+                "View employees by role",
+                "View employee by manager",
                 "Update an employee role",
+                "Update an employee manager",
+                "Delete an employee",
+                "Delete a department",
                 "Quit"
             ]
         }
@@ -53,21 +57,32 @@ const init = () => {
             case  "Add an employee":
                 addEmployee();
                 break;
-            case "View a department":
-                viewDepartment();
+            case "View all employees":
+                viewEmployee();
                 break;
+            
+            // case "View employees by a department":
+            //     viewDepartment();
+            //     break;
+            // case "View employees by role":
+            //     viewRole();
+            //     break;
+            // case "View employee by manager":
+            //         viewManager();
+            //         break;
             case "Update an employee role":
                 updateEmployeeRole();
                 break;
-            // case "View a role":
-            //     viewRole();
+            // case  "Update an employee manager":
+            //     updateEmployeeManager();
             //     break;
-           
-            // case "View an employee":
-            //     viewEmployee();
+            // case "Delete an employee":
+            //     deleteEmployee();
             //     break;
-            // 
-
+            // case "Delete a department":
+            //     deleteDepartment();
+            //     break;
+            /// view budget??
             default:
                 quitProgram(); // displays something in console and connection.end
         }
@@ -120,26 +135,7 @@ const addDepartment = () => {
 
 // need to review it
 
-const viewDepartment = () => {
 
-
-        console.log("Displaying a department...\n");
-        
-        var query = connection.query(
-            //"SELECT name, first_name, last_name FROM department LEFT JOIN employee ON department.id = ",
-            "SELECT * FROM department",
-            
-            function(err,res){
-                if (err) throw err;
-                console.log(" Viewing all departments");
-                console.table(res);//??
-                init();
-            });
-            
-        //console.log(query.sql);
-
-    //});
-}
 
 // add roles
 const addRole = () => {
@@ -330,6 +326,65 @@ const updateEmployeeRole = () => {
     });
 }
 
+const viewEmployee = () => {
+
+
+    console.log("Displaying all the employees");
+    const query = "SELECT employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id LEFT JOIN employee manager ON manager.id = employee.manager_id";
+    connection.query(query, 
+       
+        function(err,res){
+            if (err) throw err;
+            console.table(res);
+            init();
+    })
+    
+}
+
+// const viewRole = () => {
+//     console.log("Displaying employees by role");
+    
+//     const query = "SELECT role.title, role.salary, department.name AS department FROM role INNER JOIN department ON role.department_id = department.id";
+//     connection.query(query,
+//         function(err,res){
+//             if (err) throw err;
+//             console.table(res);
+//         })
+ 
+
+// }
+
+
+// const viewDepartment = () => {
+
+
+//     console.log("Displaying all employees of a department...\n");
+   
+//     inquirer.prompt([
+//         {
+
+//             type:"input",
+//             name: "viewDept",
+//             message:"which Department?"
+//         }
+//     ]).then(function(response){
+//         var query = connection.query(
+//             //"SELECT name, first_name, last_name FROM department LEFT JOIN employee ON department.id = ",
+//             "SELECT * FROM department WHERE ?",
+//             {
+//                 name = response.viewDept
+//             },
+//             function(err,res){
+
+//             if (err) throw err;
+//             console.log(" Viewing the" + response.viewDept + "department");
+//             console.table(res);//??
+//             init();
+//     });
+
+//     });
+    
+// }
 
 
 
