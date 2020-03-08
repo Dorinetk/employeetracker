@@ -60,22 +60,21 @@ const init = () => {
             case "View all employees":
                 viewEmployee();
                 break;
+            case "View employees by role":
+                viewRole();
+                break;
             
             // case "View employees by a department":
             //     viewDepartment();
             //     break;
-            // case "View employees by role":
-            //     viewRole();
-            //     break;
+            
             // case "View employee by manager":
             //         viewManager();
             //         break;
             case "Update an employee role":
                 updateEmployeeRole();
                 break;
-            // case  "Update an employee manager":
-            //     updateEmployeeManager();
-            //     break;
+        
             // case "Delete an employee":
             //     deleteEmployee();
             //     break;
@@ -341,18 +340,41 @@ const viewEmployee = () => {
     
 }
 
-// const viewRole = () => {
-//     console.log("Displaying employees by role");
-    
-//     const query = "SELECT role.title, role.salary, department.name AS department FROM role INNER JOIN department ON role.department_id = department.id";
-//     connection.query(query,
-//         function(err,res){
-//             if (err) throw err;
-//             console.table(res);
-//         })
- 
+const viewRole = () => {
 
-// }
+    connection.query("SELECT * FROM role", function(err, rolesToView){
+
+        inquirer.prompt(
+            {
+                type: "list",
+                name: "roleToView",
+                message:"Select the role that you want to view: ",
+                choices: rolesToView.map(role => {
+                    return {
+                        value: role.id,
+                        name: role.title
+                    }
+                })
+            }
+        )
+        .then(function(response){
+
+    
+        console.log("Displaying employees by role");
+        
+        const query = "SELECT role.title, role.salary, employee.first_name, employee.last_name FROM role LEFT JOIN employee ON role.id = employee.role_id WHERE ?";
+        connection.query(query,
+            {
+                role_id: response.roleToView
+            },
+            function(err,res){
+                if (err) throw err;
+                console.table(res);
+                init();
+            })
+        })
+  });
+}
 
 
 // const viewDepartment = () => {
