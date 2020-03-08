@@ -75,9 +75,9 @@ const init = () => {
                 updateEmployeeRole();
                 break;
         
-            // case "Delete an employee":
-            //     deleteEmployee();
-            //     break;
+            case "Delete an employee":
+                deleteEmployee();
+                break;
             // case "Delete a department":
             //     deleteDepartment();
             //     break;
@@ -412,37 +412,42 @@ const viewDepartment = () => {
   });
 }
 
+const deleteEmployee = () => {
+    connection.query("SELECT * FROM employee", function(err,delEmployee){
+        if (err) throw err;
+        inquirer.prompt({
+            name: "delEmp",
+             type:"rawlist",
+             message: "Select the employee to be deleted: ",
+             choices: delEmployee.map (employee => {
+                return {
+                    value: employee.id,
+                    name: employee.first_name
+                }
+            
+              })
+            
+        })
+        .then(function(response){
+            let query = "DELETE FROM employee WHERE ? ";
+            connection.query(query,
+            {
+                id: response.delEmp
+            },
+            function(err, ans){
+                if (err) throw err;
+                console.log("Employee deleted.");
+                viewEmployee();
+                init();
+            }
+            )
 
-// const viewDepartment = () => {
+        });
 
 
-//     console.log("Displaying all employees of a department...\n");
-   
-//     inquirer.prompt([
-//         {
+    });
+}
 
-//             type:"input",
-//             name: "viewDept",
-//             message:"which Department?"
-//         }
-//     ]).then(function(response){
-//         var query = connection.query(
-//             //"SELECT name, first_name, last_name FROM department LEFT JOIN employee ON department.id = ",
-//             "SELECT * FROM department WHERE ?",
-//             {
-//                 name = response.viewDept
-//             },
-//             function(err,res){
-
-//             if (err) throw err;
-//             console.log(" Viewing the" + response.viewDept + "department");
-//             console.table(res);//??
-//             init();
-//     });
-
-//     });
-    
-// }
 
 
 
