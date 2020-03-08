@@ -64,9 +64,9 @@ const init = () => {
                 viewRole();
                 break;
             
-            // case "View employees by a department":
-            //     viewDepartment();
-            //     break;
+            case "View employees by a department":
+                viewDepartment();
+                break;
             
             // case "View employee by manager":
             //         viewManager();
@@ -126,7 +126,7 @@ const addDepartment = () => {
             init();
             
         });
-        console.log(query.sql);
+        //console.log(query.sql);
 
     });
 }
@@ -360,12 +360,48 @@ const viewRole = () => {
         .then(function(response){
 
     
-        console.log("Displaying employees by role");
+        console.log("Displaying employees with the chosen role");
         
         const query = "SELECT role.title, role.salary, employee.first_name, employee.last_name FROM role LEFT JOIN employee ON role.id = employee.role_id WHERE ?";
         connection.query(query,
             {
                 role_id: response.roleToView
+            },
+            function(err,res){
+                if (err) throw err;
+                console.table(res);
+                init();
+            })
+        })
+  });
+}
+
+const viewDepartment = () => {
+
+    connection.query("SELECT * FROM department", function(err, departmentToView){
+
+        inquirer.prompt(
+            {
+                type: "list",
+                name: "deptToView",
+                message:"Select the department that you want to view: ",
+                choices: departmentToView.map(department => {
+                    return {
+                        value: department.name,
+                        name: department.name
+                    }
+                })
+            }
+        )
+        .then(function(response){
+
+    
+        console.log("Displaying employees of the " + response.deptToView +"department ");
+        
+        const query = "SELECT department.name, employee.first_name, employee.last_name FROM department LEFT JOIN role ON department.id = role.department_id LEFT JOIN employee ON employee.role_id = role.id WHERE ?";
+        connection.query(query,
+            {
+                name: response.deptToView
             },
             function(err,res){
                 if (err) throw err;
