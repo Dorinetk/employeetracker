@@ -27,7 +27,8 @@ Some screenshots:\
 <img width="697" alt="Screen Shot 2020-03-08 at 9 49 04 PM" src="https://user-images.githubusercontent.com/58992132/76176421-f7da1d00-6186-11ea-9d35-612c98c96b99.png">
 <img width="716" alt="Screen Shot 2020-03-08 at 9 49 38 PM" src="https://user-images.githubusercontent.com/58992132/76176422-f872b380-6186-11ea-9e73-3bc82d225443.png">
 <img width="675" alt="Screen Shot 2020-03-08 at 9 49 57 PM" src="https://user-images.githubusercontent.com/58992132/76176423-f90b4a00-6186-11ea-861a-add83ec640f2.png">
-<img width="762" alt="Screen Shot 2020-03-08 at 9 50 22 PM" src="https://user-images.githubusercontent.com/58992132/76176424-f9a3e080-6186-11ea-83d4-76faaecdba50.png">
+<img width="774" alt="Screen Shot 2020-03-09 at 12 38 46 PM" src="https://user-images.githubusercontent.com/58992132/76236434-0c5bfb00-6203-11ea-8ce7-ec7ce5633a46.png">
+
 
 ## Usage
 
