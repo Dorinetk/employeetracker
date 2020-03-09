@@ -13,7 +13,7 @@ It allows user to interact with an employee database and to generate several rep
 [* Description](#Description) \
 [* Usage](#Usage) \
 [* License](#License) \
-[* Contributing](#Contibuting) \
+[* Contributing](#Contributing) \
 [* Demo](#Demo) 
 
 ## Demo
