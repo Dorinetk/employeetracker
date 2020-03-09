@@ -17,11 +17,11 @@ It allows user to interact with an employee database and to generate several rep
 [* Demo](#Demo) 
 
 ## Demo
-Click to view the app demo on command line:
+Click Demogif to view the app demo on command line:
 
-[Demogif](https://drive.google.com/file/d/1utVuo3CnbXGNCVBX7w0vT4OYEL1MIZBV/view?usp=sharing)
+[Demogif] (https://drive.google.com/file/d/1RMfnwCEWYFRh16UI82ab_O0N8bCa5CTJ/view) \
 
-Some screenshots:
+Some screenshots:\
 <img width="640" alt="Screen Shot 2020-03-08 at 9 48 13 PM" src="https://user-images.githubusercontent.com/58992132/76176418-f6105980-6186-11ea-8701-da46baa8c202.png">
 <img width="676" alt="Screen Shot 2020-03-08 at 9 48 25 PM" src="https://user-images.githubusercontent.com/58992132/76176419-f7418680-6186-11ea-85b3-4a11b3761792.png">
 <img width="697" alt="Screen Shot 2020-03-08 at 9 49 04 PM" src="https://user-images.githubusercontent.com/58992132/76176421-f7da1d00-6186-11ea-9d35-612c98c96b99.png">
@@ -31,7 +31,7 @@ Some screenshots:
 
 ## Usage
 
-The user of the app can: \n
+The user of the app can: 
 
   * Add departments, roles, employees
 
