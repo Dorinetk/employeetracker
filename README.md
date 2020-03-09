@@ -43,7 +43,7 @@ He can also:
 
   * Delete an  employee
 
-  * View the total utilized budget of a department -- ie the combined salaries of all employees in that department
+  * View the total utilized budget of a department -- ie the combined salaries of all employees in a department
 
 ## License
 
