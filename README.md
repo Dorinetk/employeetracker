@@ -19,7 +19,7 @@ It allows user to interact with an employee database and to generate several rep
 ## Demo
 Click Demogif to view the app demo on command line:
 
-[Demogif] (https://drive.google.com/file/d/1RMfnwCEWYFRh16UI82ab_O0N8bCa5CTJ/view) \
+[Demogif](https://drive.google.com/file/d/1RMfnwCEWYFRh16UI82ab_O0N8bCa5CTJ/view) 
 
 Some screenshots:\
 <img width="640" alt="Screen Shot 2020-03-08 at 9 48 13 PM" src="https://user-images.githubusercontent.com/58992132/76176418-f6105980-6186-11ea-8701-da46baa8c202.png">
