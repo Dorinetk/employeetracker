@@ -470,14 +470,12 @@ const viewDeptBudget = () => {
                 //console.log(res);
                 if (err) throw err;
 
-                let resopt = res;
-
                 
                 //console.log(resopt);
                 console.log("---------------------------------")
                 console.log("The total budget of the department of " + response.deptToBud + "  is $: " );
                 
-                console.log(resopt[0].salary);
+                console.log(res[0].salary);
                 console.log("-------------------------------------------------");
                 init();
             })
