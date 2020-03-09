@@ -115,7 +115,7 @@ const addDepartment = () => {
             console.log(response.deptName + " departement inserted! \n");
 
             // display
-            console.table(res);
+            //console.table(res);
 
             // re-starts initial questioning app
             init();
@@ -247,7 +247,7 @@ const addEmployee = () => {
                 function(err,res){
                 if(err) throw err;
                 console.log(response.firstName + " was added to the database");
-                console.table(res);
+                //console.table(res);
                 init();
               }
             );
@@ -461,23 +461,23 @@ const viewDeptBudget = () => {
      )
      .then(function(response){
 
-        const query = "SELECT SUM(salary) FROM role LEFT JOIN department ON department.id = role.department_id WHERE ?";
+        const query = "SELECT SUM(salary) AS salary FROM role LEFT JOIN department ON department.id = role.department_id WHERE ?";
         connection.query(query, 
             {
                 name: response.deptToBud
             },
-            function(err,res,fields){
+            function(err,res){
                 //console.log(res);
-
-                let resopt = JSON.parse(JSON.stringify(res));
-
                 if (err) throw err;
+
+                let resopt = res;
+
                 
                 //console.log(resopt);
                 console.log("---------------------------------")
-                console.log("The total budget of the department of " + response.deptToBud + "  is the value in $ of SUM(salary) below");
+                console.log("The total budget of the department of " + response.deptToBud + "  is $: " );
                 
-                console.log(resopt[0]);
+                console.log(resopt[0].salary);
                 console.log("-------------------------------------------------");
                 init();
             })
