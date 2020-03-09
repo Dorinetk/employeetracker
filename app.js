@@ -35,11 +35,9 @@ const init = () => {
                 "View all employees",
                 "View employees by a department",
                 "View employees by role",
-                "View employee by manager",
                 "Update an employee role",
-                "Update an employee manager",
                 "Delete an employee",
-                "Delete a department",
+                "View a department budget",
                 "Quit"
             ]
         }
@@ -68,9 +66,6 @@ const init = () => {
                 viewDepartment();
                 break;
             
-            // case "View employee by manager":
-            //         viewManager();
-            //         break;
             case "Update an employee role":
                 updateEmployeeRole();
                 break;
@@ -78,10 +73,10 @@ const init = () => {
             case "Delete an employee":
                 deleteEmployee();
                 break;
-            // case "Delete a department":
-            //     deleteDepartment();
-            //     break;
-            /// view budget??
+    
+            case "View a department budget":
+                viewDeptBudget();
+                break;
             default:
                 quitProgram(); // displays something in console and connection.end
         }
@@ -398,7 +393,7 @@ const viewDepartment = () => {
     
         console.log("Displaying employees of the " + response.deptToView +"department ");
         
-        const query = "SELECT department.name, employee.first_name, employee.last_name FROM department LEFT JOIN role ON department.id = role.department_id LEFT JOIN employee ON employee.role_id = role.id WHERE ?";
+        const query = "SELECT department.name, employee.first_name, employee.last_name, role.salary FROM department LEFT JOIN role ON department.id = role.department_id LEFT JOIN employee ON employee.role_id = role.id WHERE ?";
         connection.query(query,
             {
                 name: response.deptToView
@@ -446,6 +441,49 @@ const deleteEmployee = () => {
 
 
     });
+}
+
+const viewDeptBudget = () => {
+   connection.query("SELECT * FROM department", function(err, deptForBudget){
+      if (err) throw err;
+     inquirer.prompt(
+        {
+            type: "list",
+            name: "deptToBud",
+            message:"Select the department to budget: ",
+            choices: deptForBudget.map(department => {
+                return {
+                    value: department.name,
+                    name: department.name
+                }
+            })
+        }
+     )
+     .then(function(response){
+
+        const query = "SELECT SUM(salary) FROM role LEFT JOIN department ON department.id = role.department_id WHERE ?";
+        connection.query(query, 
+            {
+                name: response.deptToBud
+            },
+            function(err,res,fields){
+                //console.log(res);
+
+                let resopt = JSON.parse(JSON.stringify(res));
+
+                if (err) throw err;
+                
+                //console.log(resopt);
+                console.log("---------------------------------")
+                console.log("The total budget of the department of " + response.deptToBud + "  is the value in $ of SUM(salary) below");
+                
+                console.log(resopt[0]);
+                console.log("-------------------------------------------------");
+                init();
+            })
+        })
+    });
+
 }
 
 
